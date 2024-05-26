@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Menu Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar left">
+            <button onclick="changeContent('content1')">Button 1</button>
+            <button onclick="changeContent('content2')">Button 2</button>
+            <button onclick="changeContent('content3')">Button 3</button>
+            <button onclick="changeContent('content4')">Button 4</button>
+            <button onclick="changeContent('content5')">Button 5</button>
+        </div>
+        <div class="main-content" id="main-content">
+            <p id="content">Welcome! Click a button to change this content.</p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
