@@ -3,22 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Menu Website</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>My Post Explorer</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        #explorer {
+            width: 300px;
+            padding: 20px;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+        }
+        #content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .folder {
+            cursor: pointer;
+            user-select: none;
+        }
+        .folder::before {
+            content: "\1F4C1";
+            margin-right: 6px;
+        }
+        .folder.open::before {
+            content: "\1F4C2";
+        }
+        .post::before {
+            content: "\1F4C4";
+            margin-right: 6px;
+        }
+        .post {
+            cursor: pointer;
+        }
+        .nested {
+            display: none;
+            margin-left: 20px;
+        }
+        .active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar left">
-            <button onclick="changeContent('content1')">Button 1</button>
-            <button onclick="changeContent('content2')">Button 2</button>
-            <button onclick="changeContent('content3')">Button 3</button>
-            <button onclick="changeContent('content4')">Button 4</button>
-            <button onclick="changeContent('content5')">Button 5</button>
+    <div id="explorer">
+        <h2>My Post Explorer</h2>
+        <div class="folder">Projects
+            <div class="nested">
+                <div class="folder">Web Development
+                    <div class="nested">
+                        <div class="post" data-url="html-basics.html">HTML Basics</div>
+                        <div class="post" data-url="css-tricks.html">CSS Tricks</div>
+                    </div>
+                </div>
+                <div class="post" data-url="project-ideas.html">Project Ideas</div>
+            </div>
         </div>
-        <div class="main-content" id="main-content">
-            <p id="content">Welcome! Click a button to change this content.</p>
+        <div class="folder">Personal
+            <div class="nested">
+                <div class="post" data-url="my-journey.html">My Journey</div>
+                <div class="post" data-url="reflections.html">Reflections</div>
+            </div>
         </div>
     </div>
-    <script src="script/script.js"></script>
+    <div id="content">
+        <h1>Welcome to My Post Explorer</h1>
+        <p>Click on a post to view its content here.</p>
+    </div>
+
+    <script>
+        const folders = document.getElementsByClassName("folder");
+        const posts = document.getElementsByClassName("post");
+        const contentDiv = document.getElementById("content");
+
+        for (let folder of folders) {
+            folder.addEventListener("click", function(event) {
+                this.classList.toggle("open");
+                const nested = this.querySelector(".nested");
+                if (nested) {
+                    nested.classList.toggle("active");
+                }
+                event.stopPropagation();
+            });
+        }
+
+        for (let post of posts) {
+            post.addEventListener("click", function(event) {
+                const url = this.getAttribute("data-url");
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => {
+                        contentDiv.innerHTML = html;
+                    })
+                    .catch(error => {
+                        contentDiv.innerHTML = `<h2>Error</h2><p>Failed to load content: ${error}</p>`;
+                    });
+                event.stopPropagation();
+            });
+        }
+    </script>
 </body>
 </html>
