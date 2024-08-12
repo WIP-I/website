@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Post Explorer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        #explorer {
+            flex: 0 0 auto;
+            overflow-y: auto;
+            padding: 20px;
+            border-bottom: 1px solid #ccc;
+            resize: vertical;
+        }
+        #content {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .folder {
+            cursor: pointer;
+            user-select: none;
+        }
+        .folder::before {
+            content: "\1F4C1";
+            margin-right: 6px;
+        }
+        .folder.open::before {
+            content: "\1F4C2";
+        }
+        .post::before {
+            content: "\1F4C4";
+            margin-right: 6px;
+        }
+        .post {
+            cursor: pointer;
+        }
+        .nested {
+            display: none;
+            margin-left: 20px;
+        }
+        .active {
+            display: block;
+        }
+        #resizer {
+            height: 10px;
+            background: #f0f0f0;
+            cursor: row-resize;
+        }
+        @media (min-width: 768px) {
+            #container {
+                flex-direction: row;
+            }
+            #explorer {
+                width: 300px;
+                border-right: 1px solid #ccc;
+                border-bottom: none;
+                resize: horizontal;
+            }
+            #resizer {
+                width: 10px;
+                height: auto;
+                cursor: col-resize;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="explorer">
+            <h2>My Post Explorer</h2>
+            <!-- Explorer content here -->
+        </div>
+        <div id="resizer"></div>
+        <div id="content">
+            <h1>Welcome to My Post Explorer</h1>
+            <p>Click on a post to view its content here.</p>
+        </div>
+    </div>
+
+    <script>
+        const explorer = document.getElementById('explorer');
+        const content = document.getElementById('content');
+        const resizer = document.getElementById('resizer');
+        let isResizing = false;
+
+        resizer.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+        });
+
+        resizer.addEventListener('touchstart', (e) => {
+            isResizing = true;
+            document.addEventListener('touchmove', resize);
+            document.addEventListener('touchend', stopResize);
+        });
+
+        function resize(e) {
+            if (!isResizing) return;
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+
+            if (window.innerWidth >= 768) {
+                explorer.style.width = `${clientX}px`;
+            } else {
+                explorer.style.height = `${clientY}px`;
+            }
+        }
+
+        function stopResize() {
+            isResizing = false;
+            document.removeEventListener('mousemove', resize);
+            document.removeEventListener('touchmove', resize);
+        }
+
+        // Your existing folder and post click handlers here
+    </script>
+</body>
+</html>
